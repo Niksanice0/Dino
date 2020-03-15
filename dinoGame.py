@@ -34,6 +34,11 @@ cactus_options = [69, 449, 37, 410, 40, 420]
 stone_img = [pygame.image.load('img/Stone0.png'), pygame.image.load('img/Stone1.png')]
 cloud_img = [pygame.image.load('img/Cloud0.png'), pygame.image.load('img/Cloud1.png')]
 
+dino_img = [pygame.image.load('img/Dino0.png'), pygame.image.load('img/Dino1.png'),
+            pygame.image.load('img/Dino2.png'), pygame.image.load('img/Dino3.png'),
+            pygame.image.load('img/Dino4.png')]
+
+img_counter=0
 
 class Object:
     def __init__(self, x, y, width, image, speed):
@@ -97,9 +102,10 @@ def run_game():
 
         dispay.blit(land, (0, 0))
         draw_array(cactuses)
-        move_objects(stone,cloud)
+        move_objects(stone, cloud)
 
-        pygame.draw.rect(dispay, (247, 240, 22), (user_x, user_y, user_width, user_height))
+        # pygame.draw.rect(dispay, (247, 240, 22), (user_x, user_y, user_width, user_height))
+        draw_dino()
 
         pygame.display.update()
         clock.tick(80)
@@ -171,17 +177,25 @@ def open_random_onjects():
 
     return stone, cloud
 
-def move_objects(stone,cloud):
+
+def move_objects(stone, cloud):
     check = stone.move()
     if not check:
-        choice = random.randrange(0,2)
+        choice = random.randrange(0, 2)
         img_of_stone = stone_img[choice]
-        stone.return_self(display_width,500+random.randrange(10,80),stone.width,img_of_stone)
+        stone.return_self(display_width, 500 + random.randrange(10, 80), stone.width, img_of_stone)
 
     check = cloud.move()
     if not check:
         choice = random.randrange(0, 2)
         img_of_cloud = cloud_img[choice]
         cloud.return_self(display_width, random.randrange(10, 200), stone.width, img_of_cloud)
+
+def draw_dino():
+    global img_counter
+    if img_counter==25:
+        img_counter=0
+    dispay.blit(dino_img[img_counter//5], (user_x,user_y))
+    img_counter+=1
 
 run_game()
