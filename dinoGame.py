@@ -38,7 +38,8 @@ dino_img = [pygame.image.load('img/Dino0.png'), pygame.image.load('img/Dino1.png
             pygame.image.load('img/Dino2.png'), pygame.image.load('img/Dino3.png'),
             pygame.image.load('img/Dino4.png')]
 
-img_counter=0
+img_counter = 0
+
 
 class Object:
     def __init__(self, x, y, width, image, speed):
@@ -96,6 +97,8 @@ def run_game():
             make_jump = True
         if keys[pygame.K_q]:
             pygame.quit()
+        if keys[pygame.K_ESCAPE]:
+            pause()
 
         if make_jump:
             jump()
@@ -191,11 +194,37 @@ def move_objects(stone, cloud):
         img_of_cloud = cloud_img[choice]
         cloud.return_self(display_width, random.randrange(10, 200), stone.width, img_of_cloud)
 
+
 def draw_dino():
     global img_counter
-    if img_counter==25:
-        img_counter=0
-    dispay.blit(dino_img[img_counter//5], (user_x,user_y))
-    img_counter+=1
+    if img_counter == 25:
+        img_counter = 0
+    dispay.blit(dino_img[img_counter // 5], (user_x, user_y))
+    img_counter += 1
+
+
+def print_text(message, x, y, font_color=(0, 0, 0), font_type='19138.ttf', font_size=30):
+    font_type = pygame.font.Font(font_type, font_size)
+    text = font_type.render(message, True, font_color)
+    dispay.blit(text, (x, y))
+
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        print_text('Paused! Press ENTER to continue!', 160, 300)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            paused = False
+
+        pygame.display.update()
+        clock.tick(15)
+
 
 run_game()
