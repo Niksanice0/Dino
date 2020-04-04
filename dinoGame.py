@@ -110,8 +110,12 @@ def run_game():
         # pygame.draw.rect(dispay, (247, 240, 22), (user_x, user_y, user_width, user_height))
         draw_dino()
 
+        if check_collision(cactuses):
+            game = False
+
         pygame.display.update()
         clock.tick(80)
+    return game_over()
 
 
 def create_cactuses(array):
@@ -226,5 +230,37 @@ def pause():
         pygame.display.update()
         clock.tick(15)
 
+def check_collision(barriers):
+    for barrier in barriers:
+        if user_y + user_height>=barrier.y:
+            if barrier.x<=user_x<=barrier.x+barrier.width:
+                return  True
+            elif barrier.x<=user_x+user_width<=barrier.x+barrier.width:
+                return  True
+    return False
 
-run_game()
+def game_over():
+    stopped = True
+    while stopped:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        print_text('Game over! Press ENTER to play again, ESC to exit.', 230, 250)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN]:
+            return True
+        if keys[pygame.K_ESCAPE]:
+            return False
+
+        pygame.display.update()
+        clock.tick(15)
+
+while run_game():
+    pass
+pygame.quit()
+quit(
+
+)
